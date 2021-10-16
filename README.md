@@ -1,32 +1,62 @@
-current issues:
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
--updateQuery on the subscriptions rerenders the query, ending in an ugly ui update, would love to find a way to solve this but, graphql has limitations.
--if I use a field policy to handle pagination, updateQuery of the subscribeToMore gets confused with the fetch more.
+This project is consists of a very basic clone of reddit. It's a website where you can make and view and vote posts, you or some body else made.
 
-in order to fix those issues I did not use fieldPolicy, i sticked to updateQuery and also fetch policy has been changed to networkOnly. This enabled me to both fetchMore and append subscription data, but i needed to add a Limit state that will instruct query to fetch incrementally more when new subscription data comes in, will need to fiddle a little bit more around.
+Features:
+* Register
+* Login
+* Logout
+* Start chats
+* Send and receive messages
+* Live notifications
+* Recover lost passwords
 
-also in order to make it properly work i needed to rip off the real limit off the server
+This website features cookie authentication for security.
 
-# Example app with [chakra-ui](https://github.com/chakra-ui/chakra-ui)
 
-This example features how to use [chakra-ui](https://github.com/chakra-ui/chakra-ui) as the component library within a Next.js app.
 
-We are connecting the Next.js `_app.js` with `chakra-ui`'s Theme and ColorMode containers so the pages can have app-wide dark/light mode. We are also creating some components which shows the usage of `chakra-ui`'s style props.
+### Built With
 
-## Deploy your own
+Those are the frameworks/libraries used to build this website client.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+* [Next.js](https://nextjs.org/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Apollo Client](https://www.apollographql.com/docs/react/)
+* [Chakra-UI](https://chakra-ui.com/)
+* [Formik](https://formik.org/)
+* [Graphql Code Generator](https://www.graphql-code-generator.com/)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-chakra-ui&project-name=with-chakra-ui&repository-name=with-chakra-ui)
 
-## How to use
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+<!-- GETTING STARTED -->
+## Getting Started
 
-```bash
-npx create-next-app --example with-chakra-ui with-chakra-ui-app
-# or
-yarn create next-app --example with-chakra-ui with-chakra-ui-app
-```
+In order to try this locally you you will need to also download and run the [server side](https://github.com/CristianCiubancan/chat-server).
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+### Prerequisites
+
+To run this project you will need to do the following:
+* yarn
+  ```sh
+  npm install --global yarn
+  ```
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/CristianCiubancan/reddit-client
+   ```
+2. Install packages
+   ```sh
+   yarn install
+   ```
+3. Enter your API in `.env.local`
+   ```.env.local
+   NEXT_PUBLIC_API_URL=YOUR_API_ENDPOINT
+   ```
+4. Run the client
+   ```sh
+   yarn dev
+   ```
