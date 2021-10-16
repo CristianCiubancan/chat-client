@@ -1,0 +1,3 @@
+mutation ReadChatMessage($messageId: Int!) {
+  readChatMessages(messageId: $messageId)
+}
