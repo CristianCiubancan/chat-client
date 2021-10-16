@@ -1,7 +1,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is consists of a very basic clone of reddit. It's a website where you can make and view and vote posts, you or some body else made.
+This project is consists of a very basic chat app, where you can create accounts find other users on the main page and start chatting with them.
 
 Features:
 * Register
