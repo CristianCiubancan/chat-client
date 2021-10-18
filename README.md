@@ -1,21 +1,21 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is consists of a next.js based theme for WooCommerce.
+This project is consists of a very basic chat app, where you can create accounts find other users on the main page and start chatting with them.
 
-[Live Preview](https://hoshop-nextgen.vercel.app/)
+[Live Preview](https://chat.happyoctopus.net/)
 
 
 Features:
 * Register
 * Login
 * Logout
-* Add to cart
-* Stripe payments
-* Static pages for super fast load times
-* Many more
+* Start chats
+* Send and receive messages
+* Live notifications
+* Recover lost passwords
 
-This website features jwt token authentication for security.
+This website features cookie authentication for security.
 
 
 
@@ -24,38 +24,42 @@ This website features jwt token authentication for security.
 Those are the frameworks/libraries used to build this website client.
 
 * [Next.js](https://nextjs.org/)
+* [TypeScript](https://www.typescriptlang.org/)
 * [Apollo Client](https://www.apollographql.com/docs/react/)
-* [Sass](https://sass-lang.com/)
-* [WooCommerce](https://woocommerce.com/)
-* [Stripe](https://stripe.com/docs/api)
+* [Chakra-UI](https://chakra-ui.com/)
+* [Formik](https://formik.org/)
+* [Graphql Code Generator](https://www.graphql-code-generator.com/)
 
 
-### Client setup
-1. Server Side Enviromnent Variables.
-Edit .env.development file as follows:
- 
-- `NEXT_PUBLIC_API_URL=https://example.com`
-- `NEXT_PUBLIC_WEBSITE_TITLE='Your store name'`
 
-Env variables from these file will be consumed by Apollo client on client side.
+<!-- GETTING STARTED -->
+## Getting Started
 
-### WordPress Setup
-1. On your WordPress site, download, Upload and activate all the plugins from wordpress/plugins folder of this repo, into your WordPress Site.
+In order to try this locally you you will need to also download and run the [server side](https://github.com/CristianCiubancan/chat-server).
 
-a. [Headless CMS](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/headless-cms.zip)
+### Prerequisites
 
-b. [woocommerce](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/woocommerce.4.4.1.zip)
+To run this project you will need to do the following:
+* yarn
+  ```sh
+  npm install --global yarn
+  ```
 
-c. [wp-graphql](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/wp-graphql.zip) - tested on ( v1.0.0 )
+### Installation
 
-d. [wp-graphql-woocommerce](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/wp-graphql-woocommerce.zip)
-
-e. [wp-gatsby](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/wp-gatsby.zip)
-
-f. [Yoast-SEO](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/wordpress-seo.14.5.zip)
-
-g. [wp-graphql-yoast-seo](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/wp-graphql-yoast-seo.zip)
-
-h. [wp-graphql-jwt-authentication](https://github.com/imranhsayed/gatsby-woocommerce-themes/blob/master/wordpress/plugins/wp-graphql-jwt-authentication.zip)
-
-* You can follow the readme to setup [https://github.com/wp-graphql/wp-graphql-jwt-authentication#install-activate--setup](https://github.com/wp-graphql/wp-graphql-jwt-authentication#install-activate--setup)
+1. Clone the repo
+   ```sh
+   git clone https://github.com/CristianCiubancan/reddit-client
+   ```
+2. Install packages
+   ```sh
+   yarn install
+   ```
+3. Enter your API in `.env.local`
+   ```.env.local
+   NEXT_PUBLIC_API_URL=YOUR_API_ENDPOINT
+   ```
+4. Run the client
+   ```sh
+   yarn dev
+   ```
