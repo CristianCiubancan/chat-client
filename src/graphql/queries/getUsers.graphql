@@ -1,0 +1,12 @@
+query GetUsers {
+  getUsers {
+    ...RegularUser
+    email
+    # chats {
+    #   id
+    #   members {
+    #     ...RegularUser
+    #   }
+    # }
+  }
+}

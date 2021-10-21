@@ -1,0 +1,20 @@
+mutation CreateChat($initiatorId: Float!, $otherMemberId: Float!) {
+  createChat(initiatorId: $initiatorId, otherMemberId: $otherMemberId) {
+    lastMessage {
+      id
+      text
+      senderId
+      readers {
+        messageId
+        reader {
+          id
+        }
+      }
+      createdAt
+    }
+    id
+    members {
+      ...RegularUser
+    }
+  }
+}

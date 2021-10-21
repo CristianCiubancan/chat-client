@@ -1,0 +1,15 @@
+subscription NewChatMessage($chatId: Int!) {
+  newChatMessage(chatId: $chatId) {
+    id
+    senderId
+    text
+    createdAt
+    updatedAt
+    readers {
+      messageId
+      reader {
+        id
+      }
+    }
+  }
+}

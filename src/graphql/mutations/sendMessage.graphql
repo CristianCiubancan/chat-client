@@ -1,0 +1,16 @@
+mutation SendMessage($input: MessageInput!) {
+  sendMessage(input: $input) {
+    id
+    senderId
+    text
+    chatId
+    readers {
+      messageId
+      reader {
+        id
+      }
+    }
+    createdAt
+    updatedAt
+  }
+}

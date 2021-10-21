@@ -1,0 +1,6 @@
+query UserNotifications {
+  userNotifications {
+    chatId
+    messageId
+  }
+}

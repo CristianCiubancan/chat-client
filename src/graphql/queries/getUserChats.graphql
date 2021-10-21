@@ -1,0 +1,21 @@
+query GetUserChats {
+  getUserChats {
+    lastMessage {
+      id
+      senderId
+      text
+      createdAt
+      updatedAt
+      readers {
+        messageId
+        reader {
+          id
+        }
+      }
+    }
+    id
+    members {
+      ...RegularUser
+    }
+  }
+}
