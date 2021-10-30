@@ -19,6 +19,7 @@ import {
 import { useRouter } from "next/router";
 import MessageInput from "./MessageInput";
 import { getScreenSize } from "../utils/getScreenSize";
+import { addDefaultSrc } from "../utils/defaultImage";
 
 interface CurrentChatProps {
   singleItemOnPage?: Boolean;
@@ -36,6 +37,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
 
   const [chatName, setChatName] = useState<String>();
   const [profilePic, setProfilePic] = useState<String>();
+  const [wsLoading, setWsLoading] = useState(false);
 
   const [readChat] = useReadChatMessageMutation();
 
@@ -66,7 +68,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
     onCompleted: (data) => {
       if (data.getMessages?.messages[0]) {
         let isChatRead = false;
-        for (let reader of data.getMessages?.messages[0].readers) {
+        for (let reader of data.getMessages?.messages[0].readersInfo.readers) {
           if (reader.reader.id === userId) {
             isChatRead = true;
           }
@@ -76,14 +78,11 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
             variables: {
               messageId: parseInt(data.getMessages.messages[0].id),
             },
+            refetchQueries: ["UserNotifications"],
           });
         }
       }
     },
-    // took this out because i cant recall why i used in the first place
-    // fetchPolicy: `${
-    //   singleItemOnPage ? "network-only" : "cache-and-network"
-    // }` as any,
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-first",
   });
@@ -112,15 +111,13 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
       w="100%"
       flex={1}
       h={(windowSize.height - 88) as number}
-      flexDirection="column"
-    >
+      flexDirection="column">
       {loading ? (
         <Flex
           flex={1}
           height={"80vh"}
           justifyContent="center"
-          alignItems="center"
-        >
+          alignItems="center">
           <Spinner color="teal.800" />
         </Flex>
       ) : (
@@ -128,8 +125,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
           flex={1}
           h={(windowSize.height - 88) as number}
           m="2"
-          flexDirection="column"
-        >
+          flexDirection="column">
           <Flex
             justifyContent="center"
             alignItems="center"
@@ -138,8 +134,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
             backgroundColor="teal"
             color="white"
             borderBottomWidth="1px"
-            position="relative"
-          >
+            position="relative">
             <Box
               fontSize={
                 windowSize.width > 900
@@ -147,8 +142,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
                   : windowSize.width < 600
                   ? "1.5rem"
                   : "2rem"
-              }
-            >
+              }>
               {chatName?.length! > 15
                 ? `${chatName?.substring(0, 15)}...`
                 : chatName}
@@ -156,6 +150,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
             <Box position="absolute" boxSize="3em" right="0" mr={5}>
               <AspectRatio ratio={1}>
                 <Image
+                  onError={addDefaultSrc}
                   borderRadius="full"
                   backgroundColor="blackAlpha.600"
                   src={profilePic as any}
@@ -172,8 +167,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
                 onClick={() => {
                   //go to login page
                   router?.push(`/chat`);
-                }}
-              >
+                }}>
                 <ChevronLeftIcon fontSize="2em" />
               </Button>
             )}
@@ -185,8 +179,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
               overflowX="hidden"
               overflowY="scroll"
               height="100%"
-              width="100%"
-            >
+              width="100%">
               {messagesData?.getMessages?.messages.map((message) => {
                 return (
                   <Flex key={message.id}>
@@ -202,8 +195,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
                         key={message.id}
                         color="white"
                         backgroundColor="teal.500"
-                        wordBreak="break-word"
-                      >
+                        wordBreak="break-word">
                         {message.text}
                       </Text>
                     ) : (
@@ -216,8 +208,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
                         paddingX="7"
                         borderRadius={10}
                         key={message.id}
-                        wordBreak="break-word"
-                      >
+                        wordBreak="break-word">
                         {message.text}
                       </Text>
                     )}
@@ -241,8 +232,7 @@ const CurrentChat: React.FC<CurrentChatProps> = ({
                   }}
                   isLoading={loading}
                   colorScheme="teal"
-                  my={8}
-                >
+                  my={8}>
                   load more
                 </Button>
               ) : null}

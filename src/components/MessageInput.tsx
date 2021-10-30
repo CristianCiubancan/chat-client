@@ -2,8 +2,12 @@ import { Box, Flex, IconButton } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React from "react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
-import { useSendMessageMutation } from "../generated/graphql";
+import {
+  GetMessagesDocument,
+  useSendMessageMutation,
+} from "../generated/graphql";
 import InputField from "./InputField";
+import { client } from "../utils/withApollo";
 
 interface MessageInputProps {
   chatId: number;
@@ -19,17 +23,18 @@ const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
     <Formik
       initialValues={{ message: "" }}
       onSubmit={async (values, actions) => {
-        sendMessage({
-          variables: {
-            input: {
-              chatId,
-              text: values.message,
+        if (values.message !== "") {
+          sendMessage({
+            variables: {
+              input: {
+                chatId,
+                text: values.message,
+              },
             },
-          },
-        });
+          });
+        }
         actions.resetForm();
-      }}
-    >
+      }}>
       {({ isSubmitting }) =>
         false ? (
           <Box></Box>
@@ -44,8 +49,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ chatId }) => {
                 borderTopWidth="1px"
                 width="100%"
                 mt="auto"
-                px={4}
-              >
+                px={4}>
                 <InputField
                   name="message"
                   placeholder="Send Message"

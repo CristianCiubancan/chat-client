@@ -6,18 +6,23 @@ import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import { withApollo } from "../utils/withApollo";
 import Layout from "../components/Layout";
+import { apolloClientAndPersistor } from "../utils/apolloClientAndPersistor";
 
 const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [login] = useLoginMutation();
+
+  const { client, persistor } = apolloClientAndPersistor();
 
   return (
     <Layout variant="small">
       <Formik
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
+          persistor.pause();
+          await persistor.purge();
+          await client.clearStore();
           const response = await login({
             variables: values,
             update: (cache, { data }) => {
@@ -46,8 +51,7 @@ const Login: React.FC<{}> = ({}) => {
               window.location.href = "/";
             }
           }
-        }}
-      >
+        }}>
         {({ isSubmitting }) => (
           <Form>
             <Box mt={4}>
@@ -74,8 +78,7 @@ const Login: React.FC<{}> = ({}) => {
               isLoading={isSubmitting}
               type="submit"
               colorScheme="teal"
-              mt={4}
-            >
+              mt={4}>
               Login
             </Button>
           </Form>
@@ -85,4 +88,4 @@ const Login: React.FC<{}> = ({}) => {
   );
 };
 
-export default withApollo({ ssr: false })(Login);
+export default Login;

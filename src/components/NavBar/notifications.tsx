@@ -1,34 +1,40 @@
 import { ChatIcon } from "@chakra-ui/icons";
 import { Button, Flex } from "@chakra-ui/react";
-import router from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
-import { UserNotificationsQuery } from "../../generated/graphql";
+import {
+  NotificationPublish,
+  UserNotificationsQuery,
+} from "../../generated/graphql";
 
 interface NotificationsProps {
-  notificationsData: UserNotificationsQuery | undefined;
+  notificationsData:
+    | {
+        __typename?: "NotificationPublish" | undefined;
+        chatId: number;
+        messageId: number;
+      }[]
+    | null
+    | undefined;
 }
 
 export const Notifications: React.FC<NotificationsProps> = ({
   notificationsData,
 }) => {
+  const router = useRouter();
   return (
     <Button
       mr={2}
       ml="auto"
       colorScheme={
-        notificationsData?.userNotifications &&
-        notificationsData.userNotifications.length > 0
-          ? "pink"
-          : "teal"
+        notificationsData && notificationsData.length > 0 ? "pink" : "teal"
       }
       onClick={() => {
         //go to login page
         router?.push(`/chat`);
       }}
-      position="relative"
-    >
-      {notificationsData?.userNotifications &&
-      notificationsData.userNotifications.length > 0 ? (
+      position="relative">
+      {notificationsData && notificationsData.length > 0 ? (
         <Flex
           justifyContent="center"
           alignItems="center"
@@ -39,9 +45,8 @@ export const Notifications: React.FC<NotificationsProps> = ({
           color="black"
           position="absolute"
           top="-2"
-          right="-0.5"
-        >
-          {notificationsData.userNotifications.length}
+          right="-0.5">
+          {notificationsData.length}
         </Flex>
       ) : null}
       <ChatIcon />

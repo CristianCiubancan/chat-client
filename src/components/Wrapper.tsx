@@ -13,8 +13,7 @@ const Wrapper: React.FC<WrapperProps> = ({ children, variant = "regular" }) => {
       flex="1"
       maxW={variant === "regular" ? "1200px" : "400px"}
       width="100%"
-      mx="auto"
-    >
+      mx="auto">
       {children}
     </Box>
   );

@@ -5,8 +5,8 @@ import InputField from "../components/InputField";
 import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
-import { withApollo } from "../utils/withApollo";
 import Layout from "../components/Layout";
+import { apolloClientAndPersistor } from "../utils/apolloClientAndPersistor";
 
 interface registerProps {}
 
@@ -16,11 +16,16 @@ const Register: React.FC<registerProps> = ({}) => {
     onCompleted: () => {},
   });
 
+  const { client, persistor } = apolloClientAndPersistor();
+
   return (
     <Layout variant="small">
       <Formik
         initialValues={{ email: "", username: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
+          persistor.pause();
+          await persistor.purge();
+          await client.clearStore();
           const response = await register({
             variables: { options: values },
             update: (cache, { data }) => {
@@ -43,8 +48,7 @@ const Register: React.FC<registerProps> = ({}) => {
             );
             window.location.href = "/";
           }
-        }}
-      >
+        }}>
         {({ isSubmitting }) => (
           <Form>
             <Box mt={4}>
@@ -74,8 +78,7 @@ const Register: React.FC<registerProps> = ({}) => {
               isLoading={isSubmitting}
               type="submit"
               colorScheme="teal"
-              mt={4}
-            >
+              mt={4}>
               Register
             </Button>
           </Form>
@@ -85,4 +88,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default withApollo({ ssr: false })(Register);
+export default Register;

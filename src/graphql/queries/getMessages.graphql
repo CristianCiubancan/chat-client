@@ -2,14 +2,18 @@ query GetMessages($chatId: Int!, $cursor: String, $limit: Int!) {
   getMessages(chatId: $chatId, cursor: $cursor, limit: $limit) {
     messages {
       id
+      chatId
       senderId
       text
       createdAt
       updatedAt
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
     }

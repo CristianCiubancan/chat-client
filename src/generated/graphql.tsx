@@ -36,6 +36,7 @@ export type Message = {
   createdAt: Scalars['String'];
   id: Scalars['ID'];
   readers: Array<Reader>;
+  readersInfo: ReadersInfo;
   senderId: Scalars['Float'];
   text: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -154,6 +155,12 @@ export type Reader = {
   updatedAt: Scalars['String'];
 };
 
+export type ReadersInfo = {
+  __typename?: 'ReadersInfo';
+  id: Scalars['Float'];
+  readers: Array<Reader>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   newChatMessage: Message;
@@ -217,7 +224,7 @@ export type CreateChatMutationVariables = Exact<{
 }>;
 
 
-export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, text: string, senderId: number, createdAt: string, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> } };
+export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, chatId: number, text: string, senderId: number, createdAt: string, readersInfo: { __typename?: 'ReadersInfo', id: number, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> } };
 
 export type ForgotPasswotdMutationVariables = Exact<{
   email: Scalars['String'];
@@ -258,7 +265,7 @@ export type SendMessageMutationVariables = Exact<{
 }>;
 
 
-export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Message', id: string, senderId: number, text: string, chatId: number, createdAt: string, updatedAt: string, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } };
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Message', id: string, senderId: number, text: string, chatId: number, createdAt: string, updatedAt: string, readersInfo: { __typename?: 'ReadersInfo', id: number, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } } };
 
 export type GetChatQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -274,12 +281,12 @@ export type GetMessagesQueryVariables = Exact<{
 }>;
 
 
-export type GetMessagesQuery = { __typename?: 'Query', getMessages?: { __typename?: 'PaginatedMessages', hasMore: boolean, messages: Array<{ __typename?: 'Message', id: string, senderId: number, text: string, createdAt: string, updatedAt: string, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> }> } | null | undefined };
+export type GetMessagesQuery = { __typename?: 'Query', getMessages?: { __typename?: 'PaginatedMessages', hasMore: boolean, messages: Array<{ __typename?: 'Message', id: string, chatId: number, senderId: number, text: string, createdAt: string, updatedAt: string, readersInfo: { __typename?: 'ReadersInfo', id: number, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } }> } | null | undefined };
 
 export type GetUserChatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserChatsQuery = { __typename?: 'Query', getUserChats: Array<{ __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, senderId: number, text: string, createdAt: string, updatedAt: string, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> }> };
+export type GetUserChatsQuery = { __typename?: 'Query', getUserChats: Array<{ __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, chatId: number, senderId: number, text: string, createdAt: string, updatedAt: string, readersInfo: { __typename?: 'ReadersInfo', id: number, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> }> };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -301,12 +308,12 @@ export type NewChatMessageSubscriptionVariables = Exact<{
 }>;
 
 
-export type NewChatMessageSubscription = { __typename?: 'Subscription', newChatMessage: { __typename?: 'Message', id: string, senderId: number, text: string, createdAt: string, updatedAt: string, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } };
+export type NewChatMessageSubscription = { __typename?: 'Subscription', newChatMessage: { __typename?: 'Message', id: string, senderId: number, text: string, chatId: number, createdAt: string, updatedAt: string, readersInfo: { __typename?: 'ReadersInfo', id: number, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } } };
 
 export type NewMessagesSentToChatSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NewMessagesSentToChatSubscription = { __typename?: 'Subscription', newMessagesSentToChat: { __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, senderId: number, text: string, createdAt: string, updatedAt: string, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> } };
+export type NewMessagesSentToChatSubscription = { __typename?: 'Subscription', newMessagesSentToChat: { __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, senderId: number, text: string, chatId: number, createdAt: string, updatedAt: string, readersInfo: { __typename?: 'ReadersInfo', id: number, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> } };
 
 export type NewNotificationReceivedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -316,7 +323,7 @@ export type NewNotificationReceivedSubscription = { __typename?: 'Subscription',
 export type NewReadMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NewReadMessageSubscription = { __typename?: 'Subscription', newReadMessage: { __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, senderId: number, text: string, createdAt: string, updatedAt: string, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> } };
+export type NewReadMessageSubscription = { __typename?: 'Subscription', newReadMessage: { __typename?: 'Chat', id: string, lastMessage?: { __typename?: 'Message', id: string, chatId: number, senderId: number, text: string, createdAt: string, updatedAt: string, readersInfo: { __typename?: 'ReadersInfo', id: number, readers: Array<{ __typename?: 'Reader', messageId: number, reader: { __typename?: 'User', id: number } }> } } | null | undefined, members: Array<{ __typename?: 'User', id: number, username: string, profilePicUrl: string }> } };
 
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
@@ -412,12 +419,16 @@ export const CreateChatDocument = gql`
   createChat(initiatorId: $initiatorId, otherMemberId: $otherMemberId) {
     lastMessage {
       id
+      chatId
       text
       senderId
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
       createdAt
@@ -622,10 +633,13 @@ export const SendMessageDocument = gql`
     senderId
     text
     chatId
-    readers {
-      messageId
-      reader {
-        id
+    readersInfo {
+      id
+      readers {
+        messageId
+        reader {
+          id
+        }
       }
     }
     createdAt
@@ -702,14 +716,18 @@ export const GetMessagesDocument = gql`
   getMessages(chatId: $chatId, cursor: $cursor, limit: $limit) {
     messages {
       id
+      chatId
       senderId
       text
       createdAt
       updatedAt
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
     }
@@ -752,14 +770,18 @@ export const GetUserChatsDocument = gql`
   getUserChats {
     lastMessage {
       id
+      chatId
       senderId
       text
       createdAt
       updatedAt
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
     }
@@ -907,12 +929,16 @@ export const NewChatMessageDocument = gql`
     id
     senderId
     text
+    chatId
     createdAt
     updatedAt
-    readers {
-      messageId
-      reader {
-        id
+    readersInfo {
+      id
+      readers {
+        messageId
+        reader {
+          id
+        }
       }
     }
   }
@@ -948,12 +974,16 @@ export const NewMessagesSentToChatDocument = gql`
       id
       senderId
       text
+      chatId
       createdAt
       updatedAt
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
     }
@@ -1023,14 +1053,18 @@ export const NewReadMessageDocument = gql`
   newReadMessage {
     lastMessage {
       id
+      chatId
       senderId
       text
       createdAt
       updatedAt
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
     }

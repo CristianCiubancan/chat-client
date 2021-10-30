@@ -16,11 +16,13 @@ import React, { LegacyRef, useRef } from "react";
 import { LogoutMutationFn, MeQuery } from "../../generated/graphql";
 import NextLink from "next/link";
 import { ApolloClient } from "@apollo/client";
+import { CachePersistor } from "apollo3-cache-persist";
 
 interface MobileNavBarProps {
   me: MeQuery | undefined;
   width: number;
   apolloClient: ApolloClient<object>;
+  cachePersistor: CachePersistor<object>;
   logoutLoading: boolean;
   logout: LogoutMutationFn;
 }
@@ -30,6 +32,7 @@ export const MobileNavBar: React.FC<MobileNavBarProps> = ({
   width,
   apolloClient,
   logoutLoading,
+  cachePersistor,
   logout,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,16 +46,14 @@ export const MobileNavBar: React.FC<MobileNavBarProps> = ({
           <Button
             ref={btnRef as LegacyRef<HTMLButtonElement>}
             colorScheme="teal"
-            onClick={onOpen}
-          >
+            onClick={onOpen}>
             Menu
           </Button>
           <Drawer
             isOpen={isOpen}
             placement="right"
             onClose={onClose}
-            finalFocusRef={btnRef}
-          >
+            finalFocusRef={btnRef}>
             <DrawerOverlay>
               <DrawerContent>
                 <DrawerCloseButton />
@@ -81,16 +82,14 @@ export const MobileNavBar: React.FC<MobileNavBarProps> = ({
             <Button
               ref={btnRef as LegacyRef<HTMLButtonElement>}
               colorScheme="teal"
-              onClick={onOpen}
-            >
+              onClick={onOpen}>
               Menu
             </Button>
             <Drawer
               isOpen={isOpen}
               placement="right"
               onClose={onClose}
-              finalFocusRef={btnRef}
-            >
+              finalFocusRef={btnRef}>
               <DrawerOverlay>
                 <DrawerContent>
                   <DrawerCloseButton />
@@ -114,14 +113,14 @@ export const MobileNavBar: React.FC<MobileNavBarProps> = ({
                         mt={4}
                         onClick={async () => {
                           localStorage.removeItem("CurrentUser");
+                          cachePersistor.pause();
+                          await cachePersistor.purge();
                           await logout();
                           router.reload();
-                          await apolloClient.resetStore();
                         }}
                         isLoading={logoutLoading}
                         variant="link"
-                        color="pink.300"
-                      >
+                        color="pink.300">
                         <Text fontSize="lg">Logout</Text>
                       </Button>
                     </Flex>

@@ -9,7 +9,6 @@ import {
 import React, { useCallback } from "react";
 import { Image } from "@chakra-ui/react";
 import Layout from "../components/Layout";
-import { withApollo } from "../utils/withApollo";
 import { isServer } from "../utils/isServer";
 import { MdPhotoCamera } from "react-icons/md";
 import { Icon } from "@chakra-ui/react";
@@ -20,6 +19,7 @@ import {
   useMeQuery,
 } from "../generated/graphql";
 import { useApolloClient } from "@apollo/client";
+import { addDefaultSrc } from "../utils/defaultImage";
 
 const MyProfile = () => {
   const server = isServer();
@@ -29,23 +29,21 @@ const MyProfile = () => {
     skip: isServer(),
   });
 
-  const [
-    changeProfilePic,
-    { loading: picLoading },
-  ] = useChangeProfilePicMutation({
-    onCompleted: async (data) => {
-      apolloClient.writeQuery({
-        query: MeDocument,
-        data: {
-          __typename: "Query",
-          me: {
-            ...user?.me,
-            profilePicUrl: data?.changeProfilePic,
+  const [changeProfilePic, { loading: picLoading }] =
+    useChangeProfilePicMutation({
+      onCompleted: async (data) => {
+        apolloClient.writeQuery({
+          query: MeDocument,
+          data: {
+            __typename: "Query",
+            me: {
+              ...user?.me,
+              profilePicUrl: data?.changeProfilePic,
+            },
           },
-        },
-      });
-    },
-  });
+        });
+      },
+    });
 
   const onDrop = useCallback(
     async ([file]) => {
@@ -75,14 +73,14 @@ const MyProfile = () => {
             maxW="sm"
             borderWidth="1px"
             boxShadow="lg"
-            overflow="hidden"
-          >
+            overflow="hidden">
             <Box w="50%" my={2}>
               <Box role="group" maxW="sm" position="relative">
                 {!picLoading && !loading ? (
                   <Box>
                     <AspectRatio ratio={1}>
                       <Image
+                        onError={addDefaultSrc}
                         src={user?.me?.profilePicUrl}
                         borderRadius="full"
                         alt=""
@@ -106,21 +104,18 @@ const MyProfile = () => {
                   w="100%"
                   display="none"
                   backgroundColor="blackAlpha.400"
-                  _groupHover={{ display: "block" }}
-                >
+                  _groupHover={{ display: "block" }}>
                   <Flex
                     h="100%"
                     justifyContent="center"
                     alignItems="center"
                     borderRadius="full"
-                    {...getRootProps()}
-                  >
+                    {...getRootProps()}>
                     <Button
                       borderRadius="full"
                       h="100%"
                       w="100%"
-                      colorScheme="blackAlpha"
-                    >
+                      colorScheme="blackAlpha">
                       <input name="imageUrl" {...getInputProps()} />
                       <Icon boxSize="3em" as={MdPhotoCamera} />
                     </Button>
@@ -142,4 +137,4 @@ const MyProfile = () => {
   );
 };
 
-export default withApollo({ ssr: false })(MyProfile);
+export default MyProfile;

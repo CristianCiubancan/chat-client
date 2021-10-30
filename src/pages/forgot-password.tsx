@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import InputField from "../components/InputField";
 import { useForgotPasswotdMutation } from "../generated/graphql";
 import NextLink from "next/link";
-import { withApollo } from "../utils/withApollo";
 import Layout from "../components/Layout";
 
 const ForgotPassword: React.FC<{}> = ({}) => {
@@ -17,8 +16,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
         onSubmit={async (values) => {
           await forgotPassword({ variables: values });
           setComplete(true);
-        }}
-      >
+        }}>
         {({ isSubmitting }) =>
           complete ? (
             <Box>
@@ -45,8 +43,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
                 isLoading={isSubmitting}
                 type="submit"
                 colorScheme="teal"
-                mt={4}
-              >
+                mt={4}>
                 Forgot password
               </Button>
             </Form>
@@ -56,4 +53,4 @@ const ForgotPassword: React.FC<{}> = ({}) => {
     </Layout>
   );
 };
-export default withApollo({ ssr: false })(ForgotPassword);
+export default ForgotPassword;

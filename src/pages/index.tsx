@@ -12,15 +12,17 @@ import React from "react";
 import Layout from "../components/Layout";
 import { ChatIcon } from "@chakra-ui/icons";
 import { useCreateChatMutation, useGetUsersQuery } from "../generated/graphql";
-import { withApollo } from "../utils/withApollo";
 import { useRouter } from "next/router";
 import { isServer } from "../utils/isServer";
+import { addDefaultSrc } from "../utils/defaultImage";
 
 const Index = () => {
   const server = isServer();
   const router = useRouter();
 
-  const { data, loading } = useGetUsersQuery();
+  const { data, loading } = useGetUsersQuery({
+    fetchPolicy: "cache-and-network",
+  });
   if (!data && !loading) {
     return <div>posts couldn't be retrieved from the server</div>;
   }
@@ -41,8 +43,7 @@ const Index = () => {
           flex={1}
           height={"80vh"}
           justifyContent="center"
-          alignItems="center"
-        >
+          alignItems="center">
           <Spinner color="teal.800" />
         </Flex>
       ) : (
@@ -55,13 +56,13 @@ const Index = () => {
                 mt={8}
                 p={5}
                 shadow="md"
-                borderWidth="1px"
-              >
+                borderWidth="1px">
                 <Box flex={1} overflow="hidden">
                   <Flex>
                     <Box boxSize="2.5em" mr={2}>
                       <AspectRatio ratio={1}>
                         <Image
+                          onError={addDefaultSrc}
                           borderRadius="full"
                           backgroundColor="blackAlpha.600"
                           src={p.profilePicUrl}
@@ -72,8 +73,7 @@ const Index = () => {
                       fontSize="large"
                       mt={2}
                       color="pink.300"
-                      display="inline"
-                    >
+                      display="inline">
                       {p.username.length > 20
                         ? ` ${p.username.slice(0, 20)}...`
                         : ` ${p.username}`}
@@ -92,8 +92,7 @@ const Index = () => {
                             otherMemberId: p.id,
                           },
                         });
-                      }}
-                    >
+                      }}>
                       <ChatIcon />
                     </Button>
                   )
@@ -104,8 +103,7 @@ const Index = () => {
                     onClick={() => {
                       //go to login page
                       router?.push(`/register`);
-                    }}
-                  >
+                    }}>
                     <ChatIcon />
                   </Button>
                 )}
@@ -118,4 +116,4 @@ const Index = () => {
   );
 };
 
-export default withApollo({ ssr: false })(Index);
+export default Index;

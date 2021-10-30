@@ -24,37 +24,41 @@ class WebSocketLink extends ApolloLink {
           next: sink.next.bind(sink),
           complete: sink.complete.bind(sink),
           error: (err) => {
-            if (err instanceof Error) {
-              return sink.error(err);
-            }
+            console.log(err);
+            // if (err instanceof Error) {
+            //   return sink.error(err);
+            // }
 
-            if (err instanceof CloseEvent) {
-              return sink.error(
-                // reason will be available on clean closes
-                new Error(
-                  `Socket closed with event ${err.code} ${err.reason || ""}`
-                )
-              );
-            }
+            // if (err instanceof CloseEvent) {
+            //   return sink.error(
+            //     // reason will be available on clean closes
+            //     new Error(
+            //       `Socket closed with event ${err.code} ${err.reason || ""}`
+            //     )
+            //   );
+            // }
 
-            return sink.error(
-              new Error(
-                (err as GraphQLError[]).map(({ message }) => message).join(", ")
-              )
-            );
+            // return sink.error(
+            //   new Error(
+            //     (err as GraphQLError[]).map(({ message }) => message).join(", ")
+            //   )
+            // );
           },
         }
       );
     });
   }
 }
-
-export const webSocketLink = () =>
-  new WebSocketLink({
+export let activeSocket: any;
+export const webSocketLink = () => {
+  return new WebSocketLink({
     url: process.env.NEXT_PUBLIC_API_SUBSCRIPTIONS_URL as string,
-    lazy: false,
+    keepAlive: 10000,
     on: {
-      error: (err) => console.log(err),
+      opened: (socket: any) => {
+        activeSocket = socket;
+      },
     },
     webSocketImpl: ws,
   });
+};

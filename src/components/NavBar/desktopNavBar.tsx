@@ -2,15 +2,18 @@ import { ApolloClient } from "@apollo/client";
 import { AspectRatio, Box, Flex, Link, Text } from "@chakra-ui/layout";
 import { Image } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
+import { CachePersistor } from "apollo3-cache-persist";
 import NextLink from "next/link";
 import router from "next/router";
 import React from "react";
 import { LogoutMutationFn, MeQuery } from "../../generated/graphql";
+import { addDefaultSrc } from "../../utils/defaultImage";
 
 interface DesktopNavBarProps {
   me: MeQuery | undefined;
   width: number;
   apolloClient: ApolloClient<object>;
+  cachePersistor: CachePersistor<object>;
   logoutLoading: boolean;
   logout: LogoutMutationFn;
 }
@@ -18,6 +21,7 @@ interface DesktopNavBarProps {
 export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
   me,
   width,
+  cachePersistor,
   apolloClient,
   logoutLoading,
   logout,
@@ -47,6 +51,7 @@ export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
                 <Box boxSize="2em" mr={2}>
                   <AspectRatio ratio={1}>
                     <Image
+                      onError={addDefaultSrc}
                       borderRadius="full"
                       boxSize="2em"
                       src={me?.me?.profilePicUrl}
@@ -58,14 +63,14 @@ export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
             <Button
               onClick={async () => {
                 localStorage.removeItem("CurrentUser");
+                cachePersistor.pause();
+                await cachePersistor.purge();
                 await logout();
                 router.reload();
-                await apolloClient.resetStore();
               }}
               isLoading={logoutLoading}
               variant="link"
-              color="pink.300"
-            >
+              color="pink.300">
               <Text fontSize="xl">logout</Text>
             </Button>
           </Flex>

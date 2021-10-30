@@ -11,21 +11,26 @@ import {
 } from "../../generated/graphql";
 import { DesktopNavBar } from "./desktopNavBar";
 import { MobileNavBar } from "./mobileNavBar";
-import { useApolloClient } from "@apollo/client";
 import { Notifications } from "./notifications";
 import { useRouter } from "next/router";
+import { apolloClientAndPersistor } from "../../utils/apolloClientAndPersistor";
+import { ReloadOnIdle } from "../../utils/reloadOnIdle";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
-  const apolloClient = useApolloClient();
+  const { client, persistor } = apolloClientAndPersistor();
   const width = getScreenSize().width;
   const router = useRouter();
+
+  if (!router.query.id) {
+    ReloadOnIdle();
+  }
 
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const { data, loading } = useMeQuery();
   const { data: notificationsData, subscribeToMore } =
-    useUserNotificationsQuery();
+    useUserNotificationsQuery({ fetchPolicy: "cache-and-network" });
 
   useEffect(() => {
     const unsubscribe = subscribeToMore({
@@ -88,6 +93,13 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   useNewMessagesSentToChatSubscription();
 
+  const notificationsToDisplay = router.query.id
+    ? notificationsData?.userNotifications?.filter(
+        (notification) =>
+          notification.chatId !== parseInt(router.query.id as string)
+      )
+    : notificationsData?.userNotifications;
+
   return (
     <Flex
       justifyContent="center"
@@ -95,8 +107,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       position="sticky"
       top={0}
       bg="teal"
-      p={4}
-    >
+      p={4}>
       <Flex flex={1} alignItems="center" maxW={800}>
         <Box mr={"auto"} color="white">
           <NextLink href="/">
@@ -112,12 +123,13 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             {width > 600 ? (
               <Flex alignItems="center">
                 {!data?.me?.id ? null : (
-                  <Notifications notificationsData={notificationsData} />
+                  <Notifications notificationsData={notificationsToDisplay} />
                 )}
                 <DesktopNavBar
                   me={data}
                   width={width}
-                  apolloClient={apolloClient}
+                  apolloClient={client}
+                  cachePersistor={persistor}
                   logoutLoading={logoutLoading}
                   logout={logout}
                 />
@@ -125,12 +137,13 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             ) : (
               <Flex alignItems="center">
                 {!data?.me?.id ? null : (
-                  <Notifications notificationsData={notificationsData} />
+                  <Notifications notificationsData={notificationsToDisplay} />
                 )}
                 <MobileNavBar
                   me={data}
                   width={width}
-                  apolloClient={apolloClient}
+                  apolloClient={client}
+                  cachePersistor={persistor}
                   logoutLoading={logoutLoading}
                   logout={logout}
                 />

@@ -2,14 +2,18 @@ subscription NewReadMessage {
   newReadMessage {
     lastMessage {
       id
+      chatId
       senderId
       text
       createdAt
       updatedAt
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
     }

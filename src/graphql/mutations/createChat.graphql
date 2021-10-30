@@ -2,12 +2,16 @@ mutation CreateChat($initiatorId: Float!, $otherMemberId: Float!) {
   createChat(initiatorId: $initiatorId, otherMemberId: $otherMemberId) {
     lastMessage {
       id
+      chatId
       text
       senderId
-      readers {
-        messageId
-        reader {
-          id
+      readersInfo {
+        id
+        readers {
+          messageId
+          reader {
+            id
+          }
         }
       }
       createdAt

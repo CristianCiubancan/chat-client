@@ -4,7 +4,6 @@ import ChatList from "../components/ChatsList";
 import Layout from "../components/Layout";
 import { useMeQuery } from "../generated/graphql";
 import { getScreenSize } from "../utils/getScreenSize";
-import { withApollo } from "../utils/withApollo";
 
 const Chat = () => {
   const windowSize = getScreenSize();
@@ -20,7 +19,7 @@ const Chat = () => {
         </Flex>
       ) : (
         <Flex>
-          <ChatList singleItemOnPage userId={data?.me?.id!} />
+          <ChatList singleItemOnPage userId={data?.me?.id} />
           {windowSize.width > 800 ? (
             <Flex
               flex={1}
@@ -28,8 +27,7 @@ const Chat = () => {
               borderWidth="1px"
               m="2"
               flexDirection="column"
-              alignItems="center"
-            >
+              alignItems="center">
               <Heading>Welcome to ChatApp</Heading>
             </Flex>
           ) : null}
@@ -39,4 +37,4 @@ const Chat = () => {
   );
 };
 
-export default withApollo({ ssr: false })(Chat);
+export default Chat;

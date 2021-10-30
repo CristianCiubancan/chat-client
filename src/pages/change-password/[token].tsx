@@ -12,7 +12,6 @@ import {
 } from "../../generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import NextLink from "next/link";
-import { withApollo } from "../../utils/withApollo";
 
 const ChangePassword: NextPage = () => {
   const router = useRouter();
@@ -54,8 +53,7 @@ const ChangePassword: NextPage = () => {
               JSON.stringify(response.data?.changePassword.user)
             );
           }
-        }}
-      >
+        }}>
         {({ isSubmitting }) => (
           <Form>
             <Box mt={4}>
@@ -80,8 +78,7 @@ const ChangePassword: NextPage = () => {
               isLoading={isSubmitting}
               type="submit"
               colorScheme="teal"
-              mt={4}
-            >
+              mt={4}>
               Change password
             </Button>
           </Form>
@@ -91,4 +88,4 @@ const ChangePassword: NextPage = () => {
   );
 };
 
-export default withApollo({ ssr: false })(ChangePassword);
+export default ChangePassword;

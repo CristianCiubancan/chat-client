@@ -4,10 +4,13 @@ mutation SendMessage($input: MessageInput!) {
     senderId
     text
     chatId
-    readers {
-      messageId
-      reader {
-        id
+    readersInfo {
+      id
+      readers {
+        messageId
+        reader {
+          id
+        }
       }
     }
     createdAt

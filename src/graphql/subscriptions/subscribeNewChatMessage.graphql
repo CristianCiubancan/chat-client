@@ -3,12 +3,16 @@ subscription NewChatMessage($chatId: Int!) {
     id
     senderId
     text
+    chatId
     createdAt
     updatedAt
-    readers {
-      messageId
-      reader {
-        id
+    readersInfo {
+      id
+      readers {
+        messageId
+        reader {
+          id
+        }
       }
     }
   }
