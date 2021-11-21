@@ -49,7 +49,7 @@ To run this project you will need to do the following:
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/CristianCiubancan/reddit-client
+   git clone https://github.com/CristianCiubancan/chat-client
    ```
 2. Install packages
    ```sh
